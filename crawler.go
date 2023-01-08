@@ -33,9 +33,9 @@ func Crawl(url string) {
 func CrawlPage(i int, page chan<- int) {
 	var url string
 	if i == 1 {
-		url = "https://kgbook.com/waiguowenxue/"
+		url = "https://kgbook.com/shigesanwen/"
 	} else {
-		url = "https://kgbook.com/waiguowenxue/index_" + strconv.Itoa(i) + ".html"
+		url = "https://kgbook.com/shigesanwen/index_" + strconv.Itoa(i) + ".html"
 	}
 	Crawl(url)
 	page <- i

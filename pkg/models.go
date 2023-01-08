@@ -6,7 +6,7 @@ type Book struct {
 }
 
 type SeBook struct {
-	Author         string `json:"author" gorm:"not null;check:" selector:"div.bd > h3.list-title > em"`
+	Author         string `json:"author" gorm:"not null;" selector:"div.bd > h3.list-title > em"`
 	Name           string `json:"name" gorm:"not null" selector:"div.bd > h3.list-title > a"`
 	Classification string `json:"classification" gorm:"not null" selector:"div.list-content > p > a"`
 }

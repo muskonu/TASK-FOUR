@@ -7,9 +7,9 @@ import (
 
 func main() {
 	r := gin.Default()
-	Run(1, 5)
 	r.GET("/book", pkg.GetBook)
-	r.GET("/books", pkg.GetAllbook)
+	r.GET("/books/:class/:number", pkg.GetBookByClass)
+	r.GET("/books/:class", pkg.GetBookByClass)
 	r.GET("/book/:name", pkg.GetBookByName)
 	r.Run(":8080")
 }
