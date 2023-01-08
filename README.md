@@ -33,7 +33,7 @@
 
 ```json
 {
-    "id":152"，
+    "id":152，
     "author":"伊恩·麦克尤恩",
     "name":"甜牙",
     "classification":"外国文学"
