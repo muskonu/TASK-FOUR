@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	pkg.LogFile()
 	r := gin.Default()
 	r.GET("/book", pkg.GetBook)
 	r.GET("/books/:class/:number", pkg.GetBookByClass)
