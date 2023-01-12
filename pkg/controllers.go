@@ -17,9 +17,11 @@ func init() {
 
 func GetBook(context *gin.Context) {
 	var book Book
+	var num int64
+	var books []Book
 	rand.Seed(time.Now().UnixNano())
-	number := ReadNumber()
-	id := rand.Intn(number) + 1
+	db.Find(&books).Count(&num)
+	id := rand.Intn(int(num)) + 1
 	db.First(&book, id)
 	context.JSON(200, &book)
 	fmt.Println(context.ContentType())
