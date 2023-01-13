@@ -7,9 +7,11 @@ import (
 )
 
 func Crawl(url string) {
-	var number uint = uint(pkg.ReadNumber())
+	var books []pkg.Book
+	var number int64
 	c := colly.NewCollector()
 	db := pkg.CreateDb()
+	db.Find(&books).Count(&number)
 	c.OnResponse(func(r *colly.Response) {
 		fmt.Println("Visited", r.Request.URL)
 	})
@@ -30,7 +32,7 @@ func Crawl(url string) {
 		}
 		book := pkg.Book{}
 		book.SeBook = sbook
-		book.Id = number
+		book.Id = uint(number + 1)
 		err = db.Save(&book).Error
 		if err == nil {
 			number++
