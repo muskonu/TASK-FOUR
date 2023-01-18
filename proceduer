@@ -12,7 +12,7 @@ BEGIN
 	INSERT INTO borrows VALUES(mem_id,boo_id,NOW(),DATE_ADD(NOW(),INTERVAL l_day DAY));
 	END IF;
 END
-
+------------------------------------------------------------------------------------
 
 returnbook
 
@@ -24,7 +24,7 @@ DECLARE bor_date datetime;
 	INSERT INTO `returns` VALUES(mem_id,boo_id,bor_date,NOW());
 	END IF;
 END
-
+------------------------------------------------------------------------------------
 
 ticker
 
