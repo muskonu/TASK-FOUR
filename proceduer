@@ -1,0 +1,32 @@
+##borrowbook
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `borrowbook`(IN `mem_id` int,IN `boo_id` int)
+BEGIN
+	DECLARE m_level INT;
+	DECLARE m_holding INT;
+	DECLARE l_holding INT;
+	DECLARE l_day INT;
+	SELECT member_level,holding_book FROM members WHERE member_id=mem_id INTO m_level,m_holding;
+	SELECT hold_day,hold_book FROM benefits WHERE level=m_level INTO l_day,l_holding;
+	if m_level!=0 AND m_holding<l_holding THEN
+	INSERT INTO borrows VALUES(mem_id,boo_id,NOW(),DATE_ADD(NOW(),INTERVAL l_day DAY));
+	END IF;
+END
+
+##returnbook
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `returnbook`(IN `mem_id` int,IN `boo_id` int)
+BEGIN
+DECLARE bor_date datetime;
+	SELECT borrow_date FROM no_al_return WHERE member_id=mem_id AND book_id=boo_id INTO bor_date;
+	if FOUND_ROWS()!=0 THEN
+	INSERT INTO `returns` VALUES(mem_id,boo_id,bor_date,NOW());
+	END IF;
+END
+
+##ticker
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ticker`()
+BEGIN
+	update members SET member_level=0 WHERE members.member_id IN (SELECT member_id FROM no_al_return WHERE expect_return_date<NOW());
+END
