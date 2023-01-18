@@ -1,4 +1,4 @@
-##borrowbook
+borrowbook
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `borrowbook`(IN `mem_id` int,IN `boo_id` int)
 BEGIN
@@ -13,7 +13,8 @@ BEGIN
 	END IF;
 END
 
-##returnbook
+
+returnbook
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `returnbook`(IN `mem_id` int,IN `boo_id` int)
 BEGIN
@@ -24,7 +25,8 @@ DECLARE bor_date datetime;
 	END IF;
 END
 
-##ticker
+
+ticker
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ticker`()
 BEGIN
