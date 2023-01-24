@@ -149,13 +149,17 @@ func Auth(context *gin.Context) { //验证token
 func Register(context *gin.Context) {
 	var loginInfo LoginInfo
 	var member Member
+	var pps [16]byte
+	var secret = "salt"
 	err := context.ShouldBind(&loginInfo)
 	if err != nil {
 		context.JSON(400, err.Error())
 		return
 	}
 	member.Account = loginInfo.Account
-	member.Password = loginInfo.Password
+	member.Password = loginInfo.Password + secret
+	pps = md5.Sum([]byte(member.Password))
+	member.Password =string(pps[:16])
 	err = db.Where(&member).First(&Member{}).Error
 	fmt.Println(err)
 	if err == nil {
