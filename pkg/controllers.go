@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"crypto/md5"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,7 @@ import (
 )
 
 var db *gorm.DB
+var secret = "salt"
 
 func init() {
 	db = CreateDb()
@@ -94,13 +96,16 @@ func BorrowBook(context *gin.Context) {
 func Login(context *gin.Context) { //登录
 	var loginInfo LoginInfo
 	var member Member
+	var pps [16]byte
 	err := context.ShouldBind(&loginInfo)
 	if err != nil {
 		context.JSON(400, err.Error())
 		return
 	}
 	member.Account = loginInfo.Account
-	member.Password = loginInfo.Password
+	member.Password = loginInfo.Password + secret
+	pps = md5.Sum([]byte(member.Password))
+	member.Password = fmt.Sprintf("%x", pps)
 	result := db.Where(&member).First(&member)
 	if result.Error != nil {
 		context.JSON(401, gin.H{"err": "账号或密码错误"})
@@ -150,7 +155,6 @@ func Register(context *gin.Context) {
 	var loginInfo LoginInfo
 	var member Member
 	var pps [16]byte
-	var secret = "salt"
 	err := context.ShouldBind(&loginInfo)
 	if err != nil {
 		context.JSON(400, err.Error())
@@ -159,14 +163,13 @@ func Register(context *gin.Context) {
 	member.Account = loginInfo.Account
 	member.Password = loginInfo.Password + secret
 	pps = md5.Sum([]byte(member.Password))
-	member.Password =string(pps[:16])
+	member.Password = fmt.Sprintf("%x", pps)
 	err = db.Where(&member).First(&Member{}).Error
-	fmt.Println(err)
 	if err == nil {
 		context.JSON(401, gin.H{"err": "该账号已被注册"})
 		return
 	} else {
-		db.Create(&member)
+		err = db.Create(&member).Error
 		context.JSON(200, gin.H{"result": "您已注册成功"})
 	}
 }
